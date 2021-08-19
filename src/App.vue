@@ -113,7 +113,7 @@
 						</tr>
 					</tbody>
 				</table>
-				<table class="table table-sm table-striped bg-light m-0" id="state_table" v-else>
+				<table class="table table-sm table-striped table-hover bg-light m-0" id="state_table" v-else>
 					<thead>
 						<tr>
 							<th>Portal</th>
