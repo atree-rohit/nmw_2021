@@ -136,7 +136,7 @@
 				</table>
 			</div>
 			<div class="text-end text-muted my-2 ml-auto me-2">
-				Created by Rohit George ( rohitmg@gmail.com )
+				🄯 Rohit George
 			</div>
 		</div>
 	</div>
