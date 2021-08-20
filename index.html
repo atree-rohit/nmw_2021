@@ -1,12 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>nmw21</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-  </head>
-  <body style="overflow-x: hidden;">
-    <div id="app"></div>
-    <script src="https://atree-rohit.github.io/nmw_2021/dist/build.js"></script>
-  </body>
+<head>
+	<meta charset="utf-8">
+	<title>nmw21</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+	<style type="text/css">
+		body{
+			overflow-x: hidden;
+		}
+		.ibp_row{
+			background-color: #addafc;
+		}
+		.inat_row{
+			background-color: #fcd0ad;
+		}
+	</style>
+</head>
+<body>
+	<div id="app"></div>
+
+
+	<!-- Button trigger modal -->
+
+<!-- Modal -->
+<div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="infoModalLabel">National Moth Week India, 2021 - Results</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>This page displays the results of National Moth Week India, 2021.</p>
+        <p>The data here is from a combination of observations of moths uploaded to
+        	<a href="https://www.inaturalist.org" target="_blank">iNaturalist</a> and
+        	<a href="https://www.indiabiodiversity.org" target="_blank">India Biodiversity Portal</a>
+        	between 17-25 July 2021.
+        </p>
+        <p>
+        	In total, 11,357 observations were uploaded by 710 contributors.
+        </p>
+        <p class="mb-0">
+        	This page allows you to view the contributions filtered by :</p>
+    	<ul>
+    		<li>no of observations / no of contributors</li>
+    		<li>portal</li>
+    		<li>Level to which the observation has been identified</li>
+    	</ul>
+        <p></p>
+        <p>
+        	By clicking on a state in the map, or in the table, you will see a list of all the observations from that state. Clicking on any observation will take you to the observation on the respective portal.
+        </p>
+        <p>
+        	Observations from iNaturalist are highlighted in <span class="inat_row px-1 rounded">orange</span> and from India Biodiveristy Portal are highlighted in <span class="ibp_row px-1 rounded">blue</span>
+        </p>
+
+        <p>
+        	The data presented here was dowloaded on and 13 August, 2021 from India Biodiversity Portal and 18 August, 2021 from iNaturalist, and may have been updated on the respective portal since.
+        </p>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+	<script src="https://atree-rohit.github.io/nmw_2021/dist/build.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+	<script type="text/javascript">
+		var myModal = new bootstrap.Modal(document.getElementById("infoModal"), {});
+			myModal.show();
+	</script>
+</body>
 </html>
