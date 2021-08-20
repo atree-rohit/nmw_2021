@@ -30,12 +30,25 @@
 	}
 	#state_table{
 		font-size: .8rem;
+		overflow-x: scroll;
+	}
+	.ibp_row{
+		background-color: rgba(238, 238, 187, .5);
+	}
+	.inat_row{
+		background-color: rgba(170, 204, 51, .5);;
+	}
+	.ibp_btn{
+		background-color: rgba(238, 238, 187, 1);
+	}
+	.inat_btn{
+		background-color: rgba(170, 204, 51, 1);;
 	}
 </style>
 
 <template>
 	<div id="app" class="row">
-		<div class="col-xl-6 p-0 bg-dark">
+		<div class="col-lg-6 p-0 bg-dark">
 			<div id="map-container" class="svg-container"></div>        	
 		</div>
 		<div class="col d-flex flex-column" id="data-panel">
@@ -67,16 +80,16 @@
 					<img src="https://nationalmothweek.org/wp-content/uploads/2021/03/cropped-nmw_logos_8_edited_white.png" alt="Big Butterfly Month">
 				</div>    
 			</div>
-			<div class="d-flex flex-column" style="background-color: rgb(255, 255, 225);">
-				<div class="btn-group my-2 bg-light">
-							<button class="btn btn-sm" 
+			<div class="d-flex flex-column">
+				<div class="btn-group my-2">
+							<button class="btn btn-sm mx-1 rounded" 
 								v-for="btn in labels"
 								v-text="capatilize(btn)"
 								:class="(selected_label == btn) ? 'btn-success': 'btn-outline-primary'"
 								@click="selected_label = btn"
 							></button>                    	
 						</div>
-				<div class="btn-group my-2 bg-light">
+				<div class="btn-group my-2">
 					<button class="btn btn-sm mx-1 rounded" 
 						:class="selectedPortal('inat')"
 						@click="selectPortal('inat')"
@@ -86,7 +99,7 @@
 						@click="selectPortal('ibp')"
 					>India Biodiversity Portal</button>
 				</div>
-				<div class="btn-group my-2 bg-light">
+				<div class="btn-group my-2">
 					<button class="btn btn-sm rounded" 
 						v-for="btn in taxon_levels"
 						v-text="capatilize(btn)"
@@ -95,13 +108,13 @@
 					></button>                    	
 				</div>
 			</div>
-			<div style="overflow-y: scroll;" class="border border-info flex-grow-1">
+			<div style="overflow: scroll;" class="border border-info flex-grow-1">
 				<table class="table table-sm table-striped bg-light m-0" id="states_table" v-if="selected_state == ''">
 					<thead>
 						<tr>
 							<th>State</th>
-							<th>Contributors</th>
 							<th>Observations</th>
+							<th>Contributors</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -116,10 +129,10 @@
 				<table class="table table-sm table-striped table-hover bg-light m-0" id="state_table" v-else>
 					<thead>
 						<tr>
-							<th>Portal</th>
+							<!-- <th>Portal</th> -->
 							<th>User</th>
 							<th>Date</th>
-							<th>Order</th>
+							<!-- <th>Order</th> -->
 							<th>Superfamily</th>
 							<th>Family</th>
 							<th>Genus</th>
@@ -128,8 +141,13 @@
 						
 					</thead>
 					<tbody>
-						<tr v-for="row in state_table">
-							<td v-for="cell in row" v-text="cell"></td>
+						<tr v-for="row in state_table" :class="(row[0]=='inat')?'inat_row':'ibp_row'">
+							<td v-text="row[1]"></td>
+							<td v-text="row[2]"></td>
+							<td v-text="row[3]"></td>
+							<td v-text="row[4]"></td>
+							<td v-text="row[5]"></td>
+							<td v-text="row[6]"></td>
 							
 						</tr>
 					</tbody>
@@ -203,11 +221,11 @@
 		},
 		methods:{
 			init(){
-				this.svgWidth = window.innerWidth / 2 - 20
-				this.svgHeight = window.innerHeight - 10
-				if(window.innerWidth < 1140){
-					this.svgWidth = window.innerWidth - 50
-					this.svgHeight = window.innerHeight/1.25
+				this.svgWidth = window.innerWidth / 2 - 50
+				this.svgHeight = window.innerHeight
+				if(window.innerWidth < 1000){
+					this.svgWidth = window.innerWidth - 100
+					this.svgHeight = window.innerHeight/1.01
 				}
 				this.initData(); //make this a computed property
 			},
@@ -277,9 +295,9 @@
 				
 				this.states_table = [];
 				Object.keys(this.state_totals).forEach(state => {
-					this.states_table.push([state, this.state_totals[state][this.computed_portal].users, this.state_totals[state][this.computed_portal].observations])
+					this.states_table.push([state, this.state_totals[state][this.computed_portal].observations, this.state_totals[state][this.computed_portal].users])
 				})
-				this.states_table.sort(function(a, b){return b[2]-a[2]});
+				this.states_table.sort((a, b) => b[this.labels.indexOf(this.selected_label)+1]-a[this.labels.indexOf(this.selected_label)+1]);
 				if(this.selected_state != ""){
 					this.initStateData();
 					this.card = this.state_totals[this.selected_state][this.computed_portal];
@@ -297,7 +315,7 @@
 										portal, 
 										this.users[portal][ob[0]],
 										this.getDate(ob[1]),
-										taxon["order"],
+										// taxon["order"],
 										taxon["superfamily"],
 										taxon["family"],
 										taxon["genus"],
@@ -320,7 +338,7 @@
 					.classed("svg-content", true)
 
 
-				var projection = d3.geoMercator().scale(1400).center([85.5, 29.5])
+				var projection = d3.geoMercator().scale(1000).center([89.0, 35])
 				const path = d3.geoPath().projection(projection)
 				const colors = d3.scaleLinear().domain([0, 1, this.state_max[this.selected_label]/2, this.state_max[this.selected_label]]).range(["#f55", "#cb7", "#6c4", "#4d6"])
 				var legend = d3Legend.legendColor().scale(colors).shapeWidth(55).labelFormat(d3.format(".0f")).orient('horizontal').cells(6)
@@ -367,7 +385,7 @@
 				})
 
 				this.svg.append("g")
-					.attr("transform", "translate("+this.svgWidth*.575+", 50)")
+					.attr("transform", "translate("+this.svgWidth*.2+", 50)")
 					.call(legend)
 					.append("text")
 					.classed("map_label", true)
@@ -379,7 +397,7 @@
 				let that = this;
 				let zoom = d3.zoom()
 					.scaleExtent([.5, 7.5])
-					.translateExtent([[0,0],[that.svgWidth,that.svgHeight]])
+					.translateExtent([[-150,-150],[that.svgWidth*1.5,that.svgHeight*1.5]])
 					.on('zoom', function() {
 						that.svg.selectAll('.poly_text')
 							.attr('transform', d3.event.transform),
@@ -397,7 +415,7 @@
 			},
 			selectedPortal(p){
 				let index = this.selected_portal.indexOf(p);
-				let op = "btn-success";
+				let op = p+"_btn";
 
 				if(index == -1){
 					op = "btn-outline-danger";
