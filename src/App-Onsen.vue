@@ -49,7 +49,6 @@
 		position: sticky;
 		top: 0;
 		z-index: 1; 
-		background-color: #fff;
 		border-bottom: 1px solid #000;
 
 	}
@@ -150,9 +149,9 @@
 					></button>                    	
 				</div>
 			</div>
-			<div style="overflow: scroll;" class="border border-info flex-grow-1">
-				<table class="table table-sm table-striped bg-light m-0" id="states_table" v-if="selected_state == ''">
-					<thead>
+			<div style="overflow: scroll;" class="flex-grow-1 pe-2 bg-light">
+				<table class="table table-sm table-striped m-0" id="states_table" v-if="selected_state == ''">
+					<thead class="bg-dark text-light">
 						<tr>
 							<th>State</th>
 							<th>Observations</th>
@@ -171,67 +170,16 @@
 					</tbody>
 				</table>
 				
-				<table class="table table-sm table-striped table-hover bg-light m-0" id="state_table" v-else>
-					<thead>
+				<table class="table table-sm table-striped table-hover m-0" id="state_table" v-else>
+					<thead class="">
 						<tr>
-							<th class="text-center" style="width: 12% !important;" @click="sortTable(1)">
+							<th class="text-center bg-dark text-light" 
+								v-for="c in state_table_cols" 
+								style="width: 12% !important;" 
+								@click="sortTable(c[0])">
 								<div class="d-flex justify-content-center">
-									<span>User</span>
-									<span v-if="(currentSort == 1)" class="ms-3 text-danger">
-										<span v-if="(currentSortDir == 'asc')">▲</span>
-										<span v-else>▼</span>
-									</span>
-								</div>
-							</th>
-							<th class="text-center" @click="sortTable(2)">
-								<div class="d-flex justify-content-center">
-									<span>Date</span>
-									<span v-if="(currentSort == 2)" class="ms-3 text-danger">
-										<span v-if="(currentSortDir == 'asc')">▲</span>
-										<span v-else>▼</span>
-									</span>
-								</div>
-							</th>
-							<th @click="sortTable(3)">
-								<div class="d-flex justify-content-center">
-									<span>Order</span>
-									<span v-if="(currentSort == 3)" class="ms-3 text-danger">
-										<span v-if="(currentSortDir == 'asc')">▲</span>
-										<span v-else>▼</span>
-									</span>
-								</div>
-							</th>
-							<th @click="sortTable(4)">
-								<div class="d-flex justify-content-center">
-									<span>Superfamily</span>
-									<span v-if="(currentSort == 4)" class="ms-3 text-danger">
-										<span v-if="(currentSortDir == 'asc')">▲</span>
-										<span v-else>▼</span>
-									</span>
-								</div>
-							</th>
-							<th @click="sortTable(5)">
-								<div class="d-flex justify-content-center">
-									<span>Family</span>
-									<span v-if="(currentSort == 5)" class="ms-3 text-danger">
-										<span v-if="(currentSortDir == 'asc')">▲</span>
-										<span v-else>▼</span>
-									</span>
-								</div>
-							</th>
-							<th @click="sortTable(6)">
-								<div class="d-flex justify-content-center">
-									<span>Genus</span>
-									<span v-if="(currentSort == 6)" class="ms-3 text-danger">
-										<span v-if="(currentSortDir == 'asc')">▲</span>
-										<span v-else>▼</span>
-									</span>
-								</div>
-							</th>
-							<th @click="sortTable(7)">
-								<div class="d-flex justify-content-center">
-									<span>Species</span>
-									<span v-if="(currentSort == 7)" class="ms-3 text-danger">
+									<span>{{c[1]}}</span>
+									<span v-if="(currentSort == c[0])" class="ms-3 text-success">
 										<span v-if="(currentSortDir == 'asc')">▲</span>
 										<span v-else>▼</span>
 									</span>
@@ -294,6 +242,7 @@
 				selected_state:"",
 				currentSort:2,
 				currentSortDir:"asc",
+				state_table_cols:[[1,"User"],[2,"Date"], [3,"Order"], [4,"Superfamily"], [5,"Family"], [6,"Genus"], [7,"Species"]]
 			}
 		},
 		mounted(){
@@ -326,8 +275,6 @@
 			}
 		},
 		methods:{
-			init(){
-			},
 			initData(){
 				let totals = {};
 				let overall_totals = {users: new Set(), observations:0};
@@ -431,7 +378,7 @@
 				this.svgHeight = window.innerHeight
 				if(window.innerWidth < 1000){
 					this.svgWidth = window.innerWidth - 60
-					this.svgHeight = window.innerHeight/1.01
+					this.svgHeight = window.innerHeight/2
 				}
 				if (!d3.select("#map-container svg").empty()) {
 					d3.selectAll("svg").remove()
@@ -508,7 +455,7 @@
 				let that = this;
 				let zoom = d3.zoom()
 					.scaleExtent([.5, 7.5])
-					.translateExtent([[-150,-150],[that.svgWidth*1.5,that.svgHeight*1.5]])
+					.translateExtent([[-175,-175],[that.svgWidth*1.1,that.svgHeight*1.1]])
 					.on('zoom', function() {
 						that.svg.selectAll('.poly_text')
 							.attr('transform', d3.event.transform),
@@ -552,7 +499,7 @@
 			},
 			getDate(d){
 				let day = d+16
-				return day+" Aug"
+				return day+" Jul"
 			},
 			getHierrachy(sp_id){
 				let name = this.species_list[sp_id][1];
